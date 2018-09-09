@@ -36,6 +36,9 @@ F=A([1,3],[1,2])
 % solve the system of linear equations for the vector x
 x=inv(A)*b
 
+% for use on older versions of matlab it is faster to write A\b, it does
+% the same thing, but it's much faster
+
 %% Question 4
 disp('Question 4')
 
@@ -54,6 +57,8 @@ disp('Question 6')
 
 % read the csv file
 data='datahw1.csv';
+
+% csvread replaces NaNs with zeros and that makes your estimates biased
 data=csvread(data);
 % X is a matrix of explanatory variables
 X=data(1:size(data,1),[3,4,6]);
