@@ -1,0 +1,18 @@
+% HW2 for Econ 512 Empirical Methods
+% Motoaki Takahashi
+
+clear
+
+%% Question 2
+
+% Define the quality vector (2 by 1)
+q = [2; 2];
+
+% Define the 2 by 1 demand vector for firm A and B
+% Here A (resp B) is associated w/ the 1st (2nd) element of the quality
+% vector q
+
+% p is a 2 by 1 price vector
+
+function d = demand(p, q)
+d=exp(q-p)/
