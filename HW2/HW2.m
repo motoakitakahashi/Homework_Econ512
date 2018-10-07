@@ -147,7 +147,7 @@ p
 
 
 %% Question 5
-disp('Question 5')
+disp('Question 5') 
 
 % the range of B's qualities
 qb = 0:0.2:3;
