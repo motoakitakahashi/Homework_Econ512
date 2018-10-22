@@ -101,18 +101,8 @@ pi_nc_10000 = sim_pi(grid)
 se_nc_10000 = (pi_nc_10000-pi)^2
 
 % 100,000 grids
-x = (0.003:0.005:0.998).'; % 200-vector
-y = (0.001:0.002:0.999).'; % 500-vector
-grid =[kron(x, ones(500,1)), kron(ones(200,1), y)];
-pi_nc_100000 = sim_pi(grid)
-se_nc_100000 = (pi_nc_100000-pi)^2
-
-% (2) one-dimensional, implicit function
-p = haltonset(1,'Skip',1e3,'Leap',1e2);
-p = scramble(p,'RR2');
-
-% First, a quasi-MC
-% 200 simulations of 1000 draws
+x = (0.005:0.005:1).'; % 200-vector
+y = (0.001:0.002:0.).'; % 500-vector
 
 
 
