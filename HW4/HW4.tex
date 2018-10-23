@@ -1,0 +1,66 @@
+%=======================02-713 LaTeX template, following the 15-210 template==================
+%
+% You don't need to use LaTeX or this template, but you must turn your homework in as
+% a typeset PDF somehow.
+%
+% How to use:
+%    1. Update your information in section "A" below
+%    2. Write your answers in section "B" below. Precede answers for all 
+%       parts of a question with the command "\question{n}{desc}" where n is
+%       the question number and "desc" is a short, one-line description of 
+%       the problem. There is no need to restate the problem.
+%    3. If a question has multiple parts, precede the answer to part x with the
+%       command "\part{x}".
+%    4. If a problem asks you to design an algorithm, use the commands
+%       \algorithm, \correctness, \runtime to precede your discussion of the 
+%       description of the algorithm, its correctness, and its running time, respectively.
+%    5. You can include graphics by using the command \includegraphics{FILENAME}
+%
+\documentclass[10pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyhdr}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1pt}
+\setlength{\headheight}{13.6pt}
+\newcommand\question[2]{\vspace{.25in}\hrule\textbf{#1: #2}\vspace{.5em}\hrule\vspace{.10in}}
+\renewcommand\part[1]{\vspace{.10in}\textbf{(#1)}}
+\newcommand\algorithm{\vspace{.10in}\textbf{Algorithm: }}
+\newcommand\correctness{\vspace{.10in}\textbf{Correctness: }}
+\newcommand\runtime{\vspace{.10in}\textbf{Running time: }}
+\pagestyle{fancyplain}
+\lhead{\textbf{\NAME\ (\ANDREWID)}}
+\chead{\textbf{HW\HWNUM}}
+\rhead{\today}
+\begin{document}\raggedright
+%Section A==============Change the values below to match your information==================
+\newcommand\NAME{Motoaki Takahashi}  % your name
+\newcommand\ANDREWID{mxt323}     % your andrew id
+\newcommand\HWNUM{3}              % the homework number
+%Section B==============Put your answers to the questions below here=======================
+
+% no need to restate the problem --- the graders know which problem is which,
+% but replacing "The First Problem" with a short phrase will help you remember
+% which problem this is when you read over your homeworks to study.
+
+\question{1}{The First Problem} 
+I drew $100^2$ points from the 2-dimensional Halton sequence, and counted the ratio of the points whose squared Euclidean norm is weakly less than 1. The estimated $\pi$ is 3.1448.
+
+
+
+\question{2}{The Second Problem}
+I have $100^2$ quadrature points in $[0, 1]\times[0, 1]$, and use a Newton-Cortes method to get an approximation of $\pi$, which is 3.1016. The weights are $1/N$, where $N$ denotes the number of quadrature points.
+
+\question{3}{The Third Problem}
+Now I use the implicit function $y=\sqrt{1-x^2}$ for the upper-right part of the unit circle. I have $100^2$ points in $[0, 1]$ from a Halton sequence, and approximate $\pi$. The estimate is 3.1422.
+
+\question{4}{The Fourth Problem}
+I have 10,000 quadrature points in $[0, 1]$, and use a Newton-Cortes method. The weights are again $1/N$, where $N$ denotes the number of quadrature points. This time I use the implicit function to get an approximation of $\pi$. The estimate is 3.1414.
+
+\question{5}{The Fifth Question}
+
+
+
+
+\end{document}

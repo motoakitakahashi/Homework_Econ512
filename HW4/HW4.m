@@ -5,7 +5,7 @@ clear
 diary hw4.out
 %% Question 1
 
-% I draw 1000 points in the unit square from Halton sequence.
+% I draw 100^2 points in the unit square from Halton sequence.
 n = 100^2;
 h = haltonseq(n, 2);
 hsq = h.^2;
