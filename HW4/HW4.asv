@@ -83,7 +83,7 @@ for i=1:200
     sim_pis(i,1) = sim_pi(h);
 end
 
-mse100 = (sim_pis-pi*ones(200,1)).^2;
+mse100 = mean((sim_pis-pi*ones(200,1)).^2);
 
 k = 1000;
 sim_pis = ones(200,1);
@@ -93,9 +93,9 @@ for i=1:200
     sim_pis(i,1) = sim_pi(h);
 end
 
-mse1000 = (sim_pis-pi*ones(200,1)).^2;
+mse1000 = mean((sim_pis-pi*ones(200,1)).^2);
 
-k = 10000
+k = 10000;
 sim_pis = ones(200,1);
 
 for i=1:200
@@ -103,9 +103,10 @@ for i=1:200
     sim_pis(i,1) = sim_pi(h);
 end
 
-mse10000 = (sim_pis-pi*ones(200,1)).^2;
+mse10000 = mean((sim_pis-pi*ones(200,1)).^2);
 
 mse_psuedo = [mse100; mse1000; mse10000]
+clear k i
 
 % (2) one-dimensional, implicit function
 % quasi-MC
@@ -113,7 +114,30 @@ clear p
 p = haltonset(1,'Skip',1e3,'Leap',1e2);
 p = scramble(p,'RR2');
 
+quasi_oned_pi = [sim_pi2(p(1:100)); sim_pi2(p(101:1100)); sim_pi2(p(1101:11100))]
+se_quasi_oned = (quasi_oned_pi-pi*ones(3,1)).^2
 
+% Newton-Cortes
+nc_oned_pi = [sim_pi2(0.005:0.01:0.995); sim_pi2(0.0005:0.001:0.9995); sim_pi2(0.00005:0.0001:0.99995)]
+se_nc_oned = (nc_oned_pi_pi-pi*ones(3,1)).^2
+
+% psuedo-MC
+k = 100;
+pi_oned = 100*ones(200,1);
+for i=1:200
+    h = rand(k,1);
+    pi_oned(i) = sim_pi2(h);
+end
+mse100_2 = mean((pi_oned-pi*ones(200,1)).^2)
+
+k = 1000;
+pi_oned = 100*ones(200,1);
+for i=1:200
+    h = rand(k,1);
+    pi_oned(i) = sim_pi2(h);
+end
+mse100_2 = mean((pi_oned-pi*ones(200,1)).^2)
+    
 
 
 

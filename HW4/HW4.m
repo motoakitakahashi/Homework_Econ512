@@ -2,6 +2,7 @@
 % HW4 for Econ 512 Empirical Method
 
 clear
+diary hw4.out
 %% Question 1
 
 % I draw 1000 points in the unit square from Halton sequence.
@@ -83,7 +84,7 @@ for i=1:200
     sim_pis(i,1) = sim_pi(h);
 end
 
-mse100 = (sim_pis-pi*ones(200,1)).^2;
+mse100 = mean((sim_pis-pi*ones(200,1)).^2);
 
 k = 1000;
 sim_pis = ones(200,1);
@@ -93,9 +94,9 @@ for i=1:200
     sim_pis(i,1) = sim_pi(h);
 end
 
-mse1000 = (sim_pis-pi*ones(200,1)).^2;
+mse1000 = mean((sim_pis-pi*ones(200,1)).^2);
 
-k = 10000
+k = 10000;
 sim_pis = ones(200,1);
 
 for i=1:200
@@ -103,9 +104,10 @@ for i=1:200
     sim_pis(i,1) = sim_pi(h);
 end
 
-mse10000 = (sim_pis-pi*ones(200,1)).^2;
+mse10000 = mean((sim_pis-pi*ones(200,1)).^2);
 
 mse_psuedo = [mse100; mse1000; mse10000]
+clear k i
 
 % (2) one-dimensional, implicit function
 % quasi-MC
@@ -113,91 +115,38 @@ clear p
 p = haltonset(1,'Skip',1e3,'Leap',1e2);
 p = scramble(p,'RR2');
 
+quasi_oned_pi = [sim_pi2(p(1:100)); sim_pi2(p(101:1100)); sim_pi2(p(1101:11100))]
+se_quasi_oned = (quasi_oned_pi-pi*ones(3,1)).^2
 
+% Newton-Cortes
+nc_oned_pi = [sim_pi2(0.005:0.01:0.995); sim_pi2(0.0005:0.001:0.9995); sim_pi2(0.00005:0.0001:0.99995)]
+se_nc_oned = (nc_oned_pi-pi*ones(3,1)).^2
 
+% psuedo-MC
+k = 100;
+pi_oned = 6*ones(200,1);
+for i=1:200
+    h = rand(k,1);
+    pi_oned(i) = sim_pi2(h);
+end
+mse100_2 = mean((pi_oned-pi*ones(200,1)).^2)
 
+k = 1000;
+pi_oned = 6*ones(200,1);
+for i=1:200
+    h = rand(k,1);
+    pi_oned(i) = sim_pi2(h);
+end
+mse1000_2 = mean((pi_oned-pi*ones(200,1)).^2)
+    
+k = 10000;
+pi_oned = 6*ones(200,1);
+for i=1:200
+    h = rand(k,1);
+    pi_oned(i) = sim_pi2(h);
+end
+mse10000_2 = mean((pi_oned-pi*ones(200,1)).^2)
 
+mse_psuedo_2 = [mse100_2; mse1000_2; mse10000_2]
 
-%% following was the solution to Q5, intended to do a quasi-MC for a lot of draws 
-
-% We have two methods: (1) two-dimensional random draws (2) one-dimensional
-% implicit function
-
-% (1) two dimendional
-
-% % Here I use the built-in function haltonset to get a Halton sequence.
-% % https://www.mathworks.com/help/stats/generating-quasi-random-numbers.html
-% % Following the above web page, get a sequnce that skips the first 1000 values of the Halton sequence and then retains every 101st point
-% p = haltonset(2,'Skip',1e3,'Leap',1e2);
-% % Apply reverse-radix scrambling
-% p = scramble(p,'RR2');
-% 
-% % 200 simulations of 1000 draws
-% % sim_pi.m gets the simulated value for pi from the draws (or grids)
-% k= 1000; % the # of draws
-% sim_pi_1000 = ones(200,1); % we place simulated pi's here
-% for i = 1:200
-%     x = p(1+k*(i-1):k+k*(i-1),:);
-%     sim_pi_1000(i,1) = sim_pi(x);
-% end
-% mean(sim_pi_1000)
-% mse_1000 = mean((sim_pi_1000-pi*ones(200,1)).^2)
-% 
-% % 10000 draws
-% k= 10000;
-% sim_pi_10000 = ones(200,1); % we place simulated pi's here
-% for i = 1:200
-%     x = p(1+k*(i-1):k+k*(i-1),:);
-%     sim_pi_10000(i,1) = sim_pi(x);
-% end
-% mean(sim_pi_10000)
-% mse_10000 = mean((sim_pi_10000-pi*ones(200,1)).^2)
-% 
-% % 100000 draws
-% k = 100000;
-% sim_pi_100000 = ones(200,1); % we place simulated pi's here
-% for i = 1:200
-%     x = p(1+k*(i-1):k+k*(i-1),:);
-%     sim_pi_100000(i,1) = sim_pi(x);
-% end
-% mean(sim_pi_100000)
-% mse_100000 = mean((sim_pi_100000-pi*ones(200,1)).^2)
-% 
-% % Newton-Coates for the two-dimensional case
-% % 1000 grids
-% % somewhat arbitrarily, I get 20 by 50 grids
-% x = (0.05:0.05:1).'; % 20-vector
-% y = (0.02:0.02:1).'; % 50-vector
-% grid =[kron(x, ones(50,1)), kron(ones(20,1), y)];
-% pi_nc_1000 = sim_pi(grid)
-% se_nc_1000 = (pi_nc_1000-pi)^2
-% 
-% %clear grid x y p
-% 
-% % 10000 grids
-% x = (0.01:0.01:1).'; % 100-vector
-% y = (0.01:0.01:1).'; % 100-vector
-% grid =[kron(x, ones(100,1)), kron(ones(100,1), y)];
-% pi_nc_10000 = sim_pi(grid)
-% se_nc_10000 = (pi_nc_10000-pi)^2
-% 
-% % 100,000 grids
-% x = (0.003:0.005:0.998).'; % 200-vector
-% y = (0.001:0.002:0.999).'; % 500-vector
-% grid =[kron(x, ones(500,1)), kron(ones(200,1), y)];
-% pi_nc_100000 = sim_pi(grid)
-% se_nc_100000 = (pi_nc_100000-pi)^2
-% 
-% % (2) one-dimensional, implicit function
-% p = haltonset(1,'Skip',1e3,'Leap',1e2);
-% p = scramble(p,'RR2');
-% 
-% % First, a quasi-MC
-% % 200 simulations of 1000 draws
-
-
-
-
-
-
-
+diary off
