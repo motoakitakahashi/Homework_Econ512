@@ -40,7 +40,8 @@ est_BFGS-est_BFGS_wog
 nls_beta=@(beta) nls(X,y,beta);
 options1 = optimoptions(@lsqnonlin, 'MaxFunctionEvaluations', 30000, 'MaxIterations', 10000)
 nls_com = lsqnonlin(nls_beta, beta, -Inf, +Inf, options1)
-
+% why is it so different from the other estimates? it should have rung
+% alarms in you
 %% Question 4
 nls_nm = fminsearch(nls_beta, beta)
 
