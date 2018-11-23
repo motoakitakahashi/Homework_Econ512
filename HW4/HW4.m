@@ -18,6 +18,7 @@ clear h hsq
 % weights are 1/100^2 where 100^2 is the # of draws (points)
 x = transpose(0.01:0.01:1); % 100 by 1 vector running from 0.01 to 1
 y = transpose(0.01:0.01:1); % 100 by 1 vector running from 0.01 to 1
+% I am not sure this if the right implementation of NC
 grid =[kron(x, ones(100,1)), kron(ones(100,1), y)];
 grid = grid.^2;
 grid = sum(grid, 2);
