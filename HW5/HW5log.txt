@@ -1,0 +1,35 @@
+Question 1
+
+ans =
+
+  -1.2571e+03
+
+Question 2
+
+ans =
+
+  -1.2571e+03
+
+Question 3
+Gaussian Quadrature
+The minimizer is
+   -0.5056    2.4832    1.4054
+
+The value of the negative log-likelihood is
+  536.2378
+
+Monte Carlo
+The minimizer is
+   -0.5056    2.5578    1.1816
+
+The value of the negative log-likelihood is
+  536.5876
+
+Question 4
+The minimizer is
+   gamma      beta0    sigmab    u0    sigmau   sigmaub
+   -0.6798    3.1532    1.8791    1.4565    1.6037    0.7607
+
+The value of the negative log-likelihood is
+  463.3630
+
