@@ -6,8 +6,9 @@ function output = withu (X, Y, Z, par, node, N, T)
     sigmab = par(3); % variance (not sd) of the normal in rc
     u0 = par(4);
     sigmau = par(5);
-    sigmabu = par(6);
+    rho = par(6); % correlation coefficient
     mu = [beta0; u0]; % mean vector
+    sigmabu = sigmab^(1/2) * sigmau^(1/2) * rho; % define the covariance
     Sigma = [sigmab, sigmabu; sigmabu, sigmau]; % variance matrix
     %Cholesky decomposition
     U = chol(Sigma); %upper triangular matrix

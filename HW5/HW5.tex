@@ -1,0 +1,193 @@
+	\documentclass[12pt]{article}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+%% Sets page size and margins
+\usepackage[a4paper,top=2cm,bottom=2cm,left=2cm,right=2.5cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Homework 5}
+\author{Motoaki Takahashi}
+\date{}
+
+\begin{document}
+\maketitle
+\section*{Question 1}
+The log likelihood is -1.2571e+03.
+\section*{Question 2}
+The log likelihood is -1.2571e+03.
+\section*{Question 3}
+The starting value is $(\gamma, \beta_{0}, \sigma_{\beta})=(0, 0.1, 1)$. The maximizer of the log likelihood is\\ $(-0.5056,    2.4832,    1.4055)$. The value of maximized log-likelihood is $-536.2378$.
+\section*{Question 4}
+The starting value is $(\gamma, \beta_{0}, \sigma_{\beta}, u_{0}, \sigma_{u}, \rho)=(1, 1, 1, 1, 1, 0.3)$. The maximizer of the log likelihood is\\ $(-0.6798,    3.1532,    1.8790,    1.4566,    1.6036,    0.4382)$. The value of maximized log-likelihood is $-463.3630$.
+\section*{Code}
+\begin{small}
+\begin{verbatim}
+% Motoaki Takahashi
+% HW5 for Econ 512 Empirical Method
+
+clear
+delete HW5log.txt
+diary('HW5log.txt')
+diary on
+load('hw5.mat')
+addpath('../CEtools/');
+X = data.X;
+Y = data.Y;
+Z = data.Z;
+N = 100;
+T = 20;
+
+%% Q1
+disp('Question 1')
+par = [0, 0.1, 1];
+-withoutu(X, Y, Z, par, 20, 1, N, T)
+
+%% Q2
+disp('Question 2')
+-withoutu(X, Y, Z, par, 100, 2, N, T)
+
+%% Q3
+disp('Question 3')
+disp('Gaussian Quadrature')
+% restrict the arguments to only par
+withoutu_min = @(par) withoutu(X, Y, Z, par, 20, 1, N, T);
+par = ones(3,1); % When I started with pi*ones(1,3), I didn't get the result.
+
+% minimize the log-likelihood with the restriction that the variance is
+% positive
+
+% restriction in fmincon
+A = [0, 0, -1];
+b = 0;
+
+[x, fval] = fmincon(withoutu_min, par, A, b);
+disp('The minimizer is')
+disp('gamma beta0 sigmab')
+disp(x')
+disp('The value of the negative log-likelihood is')
+disp(fval)
+
+disp('Monte Carlo')
+% restrict the arguments to only par
+withoutu_min = @(par) withoutu(X, Y, Z, par, 100, 2, N, T);
+par = ones(3,1);
+[x, fval] = fmincon(withoutu_min, par, A, b);
+disp('The minimizer is')
+disp('gamma beta0 sigmab')
+disp(x')
+disp('The value of the negative log-likelihood is')
+disp(fval)
+
+
+%% Q4
+
+X = data.X;
+Y = data.Y;
+Z = data.Z;
+N = 100;
+T = 20;
+
+
+disp('Question 4')
+% restrict the arguments to only par
+withu_min = @(par) withu(X, Y, Z, par, 100, N, T);
+par = [ 1;1;1;1;1;0.3 ]; %cholesky decomposition needs a pd matrix
+
+% constraint
+A = [ 0, 0, -1, 0, 0, 0;
+      0, 0, 0, 0, -1, 0;
+      0, 0, 0, 0, 0, 1;
+      0, 0, 0, 0, 0, -1];
+b = [ 0; 0; 1; 1];
+[x, fval] = fmincon(withu_min, par, A, b);
+disp('The minimizer is')
+disp('   gamma      beta0    sigmab    u0    sigmau   rho')
+disp(x')
+disp('The value of the negative log-likelihood is')
+disp(fval)
+
+diary off
+\end{verbatim}
+\end{small}
+\section*{Output}
+\begin{small}
+\begin{verbatim}
+Question 1
+
+ans =
+
+  -1.2571e+03
+
+Question 2
+
+ans =
+
+  -1.2571e+03
+
+Question 3
+Gaussian Quadrature
+
+<a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'local_min_poss_with_constr','CSHelpWindow');">Local minimum possible. Constraints satisfied</a>.
+
+fmincon stopped because the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'norm_curr_step_simple_fminconip','CSHelpWindow');">size of the current step</a> is less than
+the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'step_size_tol','CSHelpWindow');">step size tolerance</a> and constraints are 
+satisfied to within the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'constraint_tolerance','CSHelpWindow');">constraint tolerance</a>.
+
+<<a href = "matlab: createExitMsg('barrier',2.000000e+00,true,true,'fmincon',5.770665e-11,'default',1.000000e-10,0.000000e+00,'default',1.000000e-06,0.000000e+00,'',0.000000e+00);">stopping criteria details</a>>
+
+The minimizer is
+gamma beta0 sigmab
+   -0.5056    2.4832    1.4055
+
+The value of the negative log-likelihood is
+  536.2378
+
+Monte Carlo
+
+<a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'local_min_poss_with_constr','CSHelpWindow');">Local minimum possible. Constraints satisfied</a>.
+
+fmincon stopped because the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'norm_curr_step_simple_fminconip','CSHelpWindow');">size of the current step</a> is less than
+the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'step_size_tol','CSHelpWindow');">step size tolerance</a> and constraints are 
+satisfied to within the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'constraint_tolerance','CSHelpWindow');">constraint tolerance</a>.
+
+<<a href = "matlab: createExitMsg('barrier',2.000000e+00,true,true,'fmincon',5.679537e-11,'default',1.000000e-10,0.000000e+00,'default',1.000000e-06,0.000000e+00,'',0.000000e+00);">stopping criteria details</a>>
+
+The minimizer is
+gamma beta0 sigmab
+   -0.5056    2.5579    1.1816
+
+The value of the negative log-likelihood is
+  536.5876
+
+Question 4
+
+<a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'local_min_poss_with_constr','CSHelpWindow');">Local minimum possible. Constraints satisfied</a>.
+
+fmincon stopped because the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'norm_curr_step_simple_fminconip','CSHelpWindow');">size of the current step</a> is less than
+the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'step_size_tol','CSHelpWindow');">step size tolerance</a> and constraints are 
+satisfied to within the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'constraint_tolerance','CSHelpWindow');">constraint tolerance</a>.
+
+<<a href = "matlab: createExitMsg('barrier',2.000000e+00,true,true,'fmincon',8.972069e-11,'default',1.000000e-10,0.000000e+00,'default',1.000000e-06,0.000000e+00,'',0.000000e+00);">stopping criteria details</a>>
+
+The minimizer is
+   gamma      beta0    sigmab    u0    sigmau   rho
+   -0.6798    3.1532    1.8790    1.4566    1.6036    0.4382
+
+The value of the negative log-likelihood is
+  463.3630
+
+
+\end{verbatim}
+\end{small}
+
+\end{document}

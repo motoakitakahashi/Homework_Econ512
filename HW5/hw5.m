@@ -27,20 +27,30 @@ disp('Question 3')
 disp('Gaussian Quadrature')
 % restrict the arguments to only par
 withoutu_min = @(par) withoutu(X, Y, Z, par, 20, 1, N, T);
-par = ones(1,3); % When I started with pi*ones(1,3), I didn't get the result.
-[x, fval] = fminsearch(withoutu_min, par);
+par = ones(3,1); % When I started with pi*ones(1,3), I didn't get the result.
+
+% minimize the log-likelihood with the restriction that the variance is
+% positive
+
+% restriction in fmincon
+A = [0, 0, -1];
+b = 0;
+
+[x, fval] = fmincon(withoutu_min, par, A, b);
 disp('The minimizer is')
-disp(x)
+disp('gamma beta0 sigmab')
+disp(x')
 disp('The value of the negative log-likelihood is')
 disp(fval)
 
 disp('Monte Carlo')
 % restrict the arguments to only par
 withoutu_min = @(par) withoutu(X, Y, Z, par, 100, 2, N, T);
-par = ones(1,3);
-[x, fval] = fminsearch(withoutu_min, par);
+par = ones(3,1);
+[x, fval] = fmincon(withoutu_min, par, A, b);
 disp('The minimizer is')
-disp(x)
+disp('gamma beta0 sigmab')
+disp(x')
 disp('The value of the negative log-likelihood is')
 disp(fval)
 
@@ -57,11 +67,18 @@ T = 20;
 disp('Question 4')
 % restrict the arguments to only par
 withu_min = @(par) withu(X, Y, Z, par, 100, N, T);
-par = [ 1,1,1,1,1,0.3 ]; %cholesky decomposition needs a pd matrix
-[x, fval] = fminsearch(withu_min, par);
+par = [ 1;1;1;1;1;0.3 ]; %cholesky decomposition needs a pd matrix
+
+% constraint
+A = [ 0, 0, -1, 0, 0, 0;
+      0, 0, 0, 0, -1, 0;
+      0, 0, 0, 0, 0, 1;
+      0, 0, 0, 0, 0, -1];
+b = [ 0; 0; 1; 1];
+[x, fval] = fmincon(withu_min, par, A, b);
 disp('The minimizer is')
-disp('   gamma      beta0    sigmab    u0    sigmau   sigmaub')
-disp(x)
+disp('   gamma      beta0    sigmab    u0    sigmau   rho')
+disp(x')
 disp('The value of the negative log-likelihood is')
 disp(fval)
 
