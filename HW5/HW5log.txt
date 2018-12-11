@@ -1,3 +1,5 @@
+[Warning: Function psi has the same name as a MATLAB builtin. We suggest you rename the function to avoid a potential name conflict.] 
+[Warning: Function psi has the same name as a MATLAB builtin. We suggest you rename the function to avoid a potential name conflict.] 
 Question 1
 
 ans =
@@ -19,7 +21,7 @@ fmincon stopped because the <a href = "matlab: helpview([docroot '/toolbox/optim
 the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'step_size_tol','CSHelpWindow');">step size tolerance</a> and constraints are 
 satisfied to within the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'constraint_tolerance','CSHelpWindow');">constraint tolerance</a>.
 
-<<a href = "matlab: createExitMsg('barrier',2.000000e+00,true,true,'fmincon',5.770665e-11,'default',1.000000e-10,0.000000e+00,'default',1.000000e-06,0.000000e+00,'',0.000000e+00);">stopping criteria details</a>>
+<<a href = "matlab: createExitMsg('barrier',2.000000e+00,true,true,'fmincon',8.603433e-11,'default',1.000000e-10,0.000000e+00,'default',1.000000e-06,0.000000e+00,'',0.000000e+00);">stopping criteria details</a>>
 
 The minimizer is
 gamma beta0 sigmab
@@ -36,7 +38,7 @@ fmincon stopped because the <a href = "matlab: helpview([docroot '/toolbox/optim
 the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'step_size_tol','CSHelpWindow');">step size tolerance</a> and constraints are 
 satisfied to within the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'constraint_tolerance','CSHelpWindow');">constraint tolerance</a>.
 
-<<a href = "matlab: createExitMsg('barrier',2.000000e+00,true,true,'fmincon',5.679537e-11,'default',1.000000e-10,0.000000e+00,'default',1.000000e-06,0.000000e+00,'',0.000000e+00);">stopping criteria details</a>>
+<<a href = "matlab: createExitMsg('barrier',2.000000e+00,true,true,'fmincon',6.062968e-11,'default',1.000000e-10,0.000000e+00,'default',1.000000e-06,0.000000e+00,'',0.000000e+00);">stopping criteria details</a>>
 
 The minimizer is
 gamma beta0 sigmab
@@ -53,7 +55,7 @@ fmincon stopped because the <a href = "matlab: helpview([docroot '/toolbox/optim
 the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'step_size_tol','CSHelpWindow');">step size tolerance</a> and constraints are 
 satisfied to within the default value of the <a href = "matlab: helpview([docroot '/toolbox/optim/msg_csh/optim_msg_csh.map'],'constraint_tolerance','CSHelpWindow');">constraint tolerance</a>.
 
-<<a href = "matlab: createExitMsg('barrier',2.000000e+00,true,true,'fmincon',8.972069e-11,'default',1.000000e-10,0.000000e+00,'default',1.000000e-06,0.000000e+00,'',0.000000e+00);">stopping criteria details</a>>
+<<a href = "matlab: createExitMsg('barrier',2.000000e+00,true,true,'fmincon',8.153514e-11,'default',1.000000e-10,0.000000e+00,'default',1.000000e-06,0.000000e+00,'',0.000000e+00);">stopping criteria details</a>>
 
 The minimizer is
    gamma      beta0    sigmab    u0    sigmau   rho

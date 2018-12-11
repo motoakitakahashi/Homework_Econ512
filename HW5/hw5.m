@@ -37,6 +37,8 @@ A = [0, 0, -1];
 b = 0;
 
 [x, fval] = fmincon(withoutu_min, par, A, b);
+% take a look at answer key to see how can you use the same function with
+% imposed equality constraints here in in question 4
 disp('The minimizer is')
 disp('gamma beta0 sigmab')
 disp(x')
