@@ -35,7 +35,7 @@ while dif > tol
         prof = kron(grid, k(i)*ones(N, 1)-k');
         prof(prof < 0) = -1E5; % punish a negative stock of lumber
         inv = k(i)*ones(N, 1)-k';
-        inv(inv<0) = 0; % avoid generating a imaginary number
+        inv(inv<0) = 0; % avoid generating an imaginary number
         inv = kron(ones(1, Z), inv);
         prof = prof - 0.2 * inv .^ (1.5); % subtract inv costs from the gross profits
         [vnew(i,:),decision(i,:)]=max(prof + delta * EV);
@@ -62,8 +62,59 @@ ylabel('Next period stock of lumber')
 
 %% Question 5
 
+% simulation
+% let's run 1000 paths and numerically get the means and the confidence
+% interval of stocks
 
+p = 1; % the initial value of lumber
+k0 = 100; % the initial stock of lumber
 
+% we will get n = 1000 simulations
+n = 1000;
+numSteps = 21; % initial state is p=1 and 20 periods ahead
+
+simu_price = zeros(n, numSteps); % this will contain the simulated paths of prices
+simu_price(:, 1) = 11 * ones(n, 1); % initial state is p=1 (11th)
+
+% make the cumulative version of the transition matrix
+cumu = cumsum(prob, 2);
+
+for s = 1:n
+    for step = 2:21
+        r = rand;
+        simu_price(s, step) = find(cumu(simu_price(s, step-1),:) > r, 1);
+    end
+end
+
+% Get the simulated paths of lumber stocks associated with the prices
+
+simu_ind = zeros(n, numSteps);
+simu_ind(:, 1) = N * ones(n, 1);
+simu_cap = zeros(n, numSteps);
+simu_cap(:, 1) = k0 * ones(n, 1);
+
+for s = 1:n
+    for step = 2:21
+        simu_ind(s, step) = decision(simu_ind(s, step-1), simu_price(s, step-1));
+        simu_cap(s, step) = k(simu_ind(s, step));
+    end
+end
+
+meancap = mean(simu_cap);
+secap = std(simu_cap) ./ sqrt(n);
+ts = tinv([0.05  0.95], n-1); 
+
+cicap = kron(meancap, ones(2, 1)) +  kron(ts', secap);
+memori = 1:numSteps;
+plot(memori, meancap, memori, cicap)
+
+title('Mean and 90 percent CI for lumber stocks')
+xlabel('Period')
+ylabel('Stock of lumber')
+
+%% Question 5
+
+Z = 5; % new number of grid points
 
 
 
