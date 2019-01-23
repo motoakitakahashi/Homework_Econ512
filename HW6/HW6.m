@@ -12,7 +12,9 @@ k = (k0/N):k0/N:k0;
 sigmau = 0.1;
 
 %% Question 2
- Z = 21; % number of grid points
+Z = 21; % number of grid points
+% Z = 5 % for coarse grid
+
  
  [prob,grid]=tauchen(Z,p0,rho,sigmau);
 disp(['The dimensions of prob are ' num2str(size(prob)) ])
@@ -47,7 +49,8 @@ while dif > tol
 end
 
 %% 
-plot(k, v(:, 8), k, v(:, 11), k, v(:, 14))
+plot(k, v(:, 8), k, v(:, 11), k, v(:, 14)) % for grid Z = 21
+% plot(k, v(:, 2), k, v(:, 3), k, v(:, 4)) % for coarse grid Z = 5
 title('Value function')
 xlabel('Stock of lumber')
 ylabel('Value')
@@ -74,7 +77,7 @@ n = 1000;
 numSteps = 21; % initial state is p=1 and 20 periods ahead
 
 simu_price = zeros(n, numSteps); % this will contain the simulated paths of prices
-simu_price(:, 1) = 11 * ones(n, 1); % initial state is p=1 (11th)
+simu_price(:, 1) = ((Z+1)/2) * ones(n, 1);
 
 % make the cumulative version of the transition matrix
 cumu = cumsum(prob, 2);
@@ -112,10 +115,9 @@ title('Mean and 90 percent CI for lumber stocks')
 xlabel('Period')
 ylabel('Stock of lumber')
 
-%% Question 5
+%% Question 6
 
-Z = 5; % new number of grid points
-
+% for question 6, redo with Z = 5
 
 
 
