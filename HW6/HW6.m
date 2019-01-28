@@ -2,6 +2,10 @@
 % HW6 Econ 512
 
 clear all
+
+diary('HW6log.txt')
+diary on
+
 delta = 0.95;
 p0 = 0.5;
 rho = 0.5;
@@ -124,7 +128,7 @@ ylabel('Stock of Lumbers')
 legend( 'Upper bound', 'Mean', 'Lower bound')
 saveas(gcf,'ci.png')
 
-
+diary off
 
 %% Question 6
 
