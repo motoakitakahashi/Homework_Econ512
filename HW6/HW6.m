@@ -12,7 +12,7 @@ k = (k0/N):k0/N:k0;
 sigmau = 0.1;
 
 %% Question 2
-Z = 21; % number of grid points
+Z = 21; % number of grid points, this must be odd
 % Z = 5 % for coarse grid
 
  
@@ -54,66 +54,77 @@ plot(k, v(:, 8), k, v(:, 11), k, v(:, 14)) % for grid Z = 21
 title('Value function')
 xlabel('Stock of lumber')
 ylabel('Value')
+saveas(gcf,'vf.png')
 
 %% Question 4
 
-plot(grid, decision(1,:), grid, decision(101,:), grid, decision(201,:), grid, decision(301,:), grid, decision(401,:), grid, decision(501,:), grid, decision(601,:),grid, decision(701,:),grid, decision(801,:), grid, decision(901,:))
+% compute decision rule
+
+drule=zeros(N,Z);
+
+for i=1:Z
+    drule(:,i)=k(decision(:,i))';
+end
+
+plot(grid, drule(1,:), grid, drule(101,:), grid, drule(201,:), grid, drule(301,:), grid, drule(401,:), grid, drule(501,:), grid, drule(601,:),grid, drule(701,:),grid, drule(801,:), grid, drule(901,:))
 
 title('Next period stock vs lumber prices')
 xlabel('Lumber price')
 ylabel('Next period stock of lumber')
+saveas(gcf,'nextstock.png')
 
 %% Question 5
 
-% simulation
-% let's run 1000 paths and numerically get the means and the confidence
-% interval of stocks
+% Construct the transition matrix from (p, k) pairs to (p', k') pairs
+% taken from stochgrow.m
+P=zeros(Z*N,Z*N);
+T = 21; % the number of periods, including the initial
 
-p = 1; % the initial value of lumber
-k0 = 100; % the initial stock of lumber
-
-% we will get n = 1000 simulations
-n = 1000;
-numSteps = 21; % initial state is p=1 and 20 periods ahead
-
-simu_price = zeros(n, numSteps); % this will contain the simulated paths of prices
-simu_price(:, 1) = ((Z+1)/2) * ones(n, 1);
-
-% make the cumulative version of the transition matrix
-cumu = cumsum(prob, 2);
-
-for s = 1:n
-    for step = 2:21
-        r = rand;
-        simu_price(s, step) = find(cumu(simu_price(s, step-1),:) > r, 1);
+for i=1:Z
+    for j=1:Z
+        P((i-1)*N+1:i*N,(j-1)*N+1:j*N)=prob(i,j)*(kron(ones(1,N),drule(:,i))==kron(ones(N,1),k));
     end
 end
 
-% Get the simulated paths of lumber stocks associated with the prices
+% the initial state is (p, k)=(1, 100)
+state = zeros(1, N*Z);
+state(1, ((Z+1)/2)*N) = 1; % this is valid as long as Z is odd
 
-simu_ind = zeros(n, numSteps);
-simu_ind(:, 1) = N * ones(n, 1);
-simu_cap = zeros(n, numSteps);
-simu_cap(:, 1) = k0 * ones(n, 1);
+% generate the distribution of p and k for T-1 remaining periods
+% and keep track of the CI for k
 
-for s = 1:n
-    for step = 2:21
-        simu_ind(s, step) = decision(simu_ind(s, step-1), simu_price(s, step-1));
-        simu_cap(s, step) = k(simu_ind(s, step));
+ci = zeros(3, T); % this will contain the mean and 90% CI for k
+ci(:,1) = 100 *ones(3,1);
+
+for t=2:T
+    next_state = state * P; %the next period's distribution of states
+    dist_kp = zeros(N, Z); % this will contain the joint distribution of k and p in period t
+    for i = 1:Z
+        dist_kp(:, i) = next_state((i-1)*N+1:i*N)';
     end
+    dist_k = sum(dist_kp'); % the marginal dist of k, which is the sum of dist_kp in the p dimension
+    clear dist_kp
+    mean = dist_k * k'; % mean of k's in period t
+    dist_k = cumsum(dist_k); % get the cumulative dist of k
+    
+    lo = max(find(dist_k<=0.05)); % the index for the 5-percentile
+    hi = min(find(dist_k>=0.95)); % the index for 95-percentile
+    
+    lo = k(lo); % 5-percentile
+    hi = k(hi); % 95-percentile
+    ci(:,t) = [hi; mean; lo];
+    clear hi mean lo
+    state = next_state;
 end
 
-meancap = mean(simu_cap);
-secap = std(simu_cap) ./ sqrt(n);
-ts = tinv([0.05  0.95], n-1); 
-
-cicap = kron(meancap, ones(2, 1)) +  kron(ts', secap);
-memori = 1:numSteps;
-plot(memori, meancap, memori, cicap)
-
-title('Mean and 90 percent CI for lumber stocks')
+plot(0:T-1, ci(1,:), 0:T-1, ci(2,:), 0:T-1, ci(3,:))
+title('90% Confidence Interval for the Stock of Lumbers')
 xlabel('Period')
-ylabel('Stock of lumber')
+ylabel('Stock of Lumbers')
+legend( 'Upper bound', 'Mean', 'Lower bound')
+saveas(gcf,'ci.png')
+
+
 
 %% Question 6
 
