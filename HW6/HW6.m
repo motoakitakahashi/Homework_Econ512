@@ -1,5 +1,6 @@
 % Motoaki Takahashi
 % HW6 Econ 512
+% all is good, check plus
 
 clear all
 
