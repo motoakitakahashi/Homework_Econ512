@@ -1,6 +1,6 @@
 % Motoaki Takahashi
 % HW7 Econ 512 Empirical Method
-
+%  all is good
 clear
 
 global L rho eta kappa l v delta beta lambda c CRIT Omega trans;
